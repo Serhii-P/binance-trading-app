@@ -1,6 +1,6 @@
 # Binance api visualization Candlestick Chart
 
-![Candlestick Chart](../../../../../Desktop/chart.png)
+![Candlestick Chart](assets/chart.png)
 
 
 ## Stack
