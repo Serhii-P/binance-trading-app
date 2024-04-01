@@ -1,33 +1,56 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ReactApexChart from "react-apexcharts";
 import { convertDataToSeries } from "../helpers/convertDataToSeries";
 import { optionsWithAnnotations } from "./chartConfig";
 import SignalTable from "../tables/signalTable";
 import { fetchInitialCandlestickData } from "../api/fetchCandleStickData";
-import { handleWebSocketConnection } from "../api/socketConnect";
+import { handleWebSocket } from "../api/socketConnect";
+import {
+  generateInitialRandomSignals,
+  generateRandomSignals,
+} from "../utils/generateRandomSignal";
 
 const TradingChart = ({ interval, symbol }) => {
   const [initialCandlestickData, setInitialCandlestickData] = useState([]);
   const [signals, setSignals] = useState([]);
   const [loading, setLoading] = useState(true);
+  const signalsGenerated = useRef(false);
 
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true);
-      const { candlestickData, initialSignals } =
-        await fetchInitialCandlestickData(symbol, interval, 50);
-      setInitialCandlestickData(candlestickData);
-      setSignals(initialSignals);
-      setLoading(false);
+      try {
+        const candlestickData = await fetchInitialCandlestickData(
+          symbol,
+          interval,
+          50
+        );
+
+        setInitialCandlestickData(candlestickData);
+
+        if (!signalsGenerated.current) {
+          const initialSignals = generateInitialRandomSignals(
+            candlestickData,
+            7
+          );
+          setSignals(initialSignals);
+          signalsGenerated.current = true;
+        }
+
+        setLoading(false);
+      } catch (error) {
+        console.log("Error fetching initial data:", error);
+      }
     };
 
     fetchData();
 
-    const ws = handleWebSocketConnection(
+    const ws = handleWebSocket(
       symbol,
       interval,
       setInitialCandlestickData,
-      setSignals
+      setSignals,
+      fetchData,
+      generateRandomSignals
     );
 
     return () => {

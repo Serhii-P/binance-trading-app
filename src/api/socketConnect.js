@@ -1,16 +1,17 @@
-import { generateRandomSignals } from "../utils/generateRandomSignal";
-
-export const handleWebSocketConnection = (
+export const handleWebSocket = (
   symbol,
   interval,
   setInitialCandlestickData,
-  setSignals
+  setSignals,
+  fetchInitialCandlestickData,
+  generateRandomSignals
 ) => {
   const ws = new WebSocket(
     `wss://stream.binance.com:9443/ws/${symbol}@kline_${interval}`
   );
 
   ws.onopen = () => {
+    console.log("ws connected");
     ws.send(
       JSON.stringify({
         method: "SUBSCRIBE",
@@ -35,7 +36,10 @@ export const handleWebSocketConnection = (
 
       setInitialCandlestickData((prevData) => {
         const newCandleStick = [...prevData];
+
         if (data.k.x) {
+          fetchInitialCandlestickData();
+
           const newSignal = generateRandomSignals([
             data.k.t,
             data.k.o,
@@ -50,6 +54,14 @@ export const handleWebSocketConnection = (
         return newCandleStick;
       });
     }
+  };
+
+  ws.onerror = (error) => {
+    console.error("WebSocket error:", error);
+  };
+
+  ws.onclose = () => {
+    console.log("WebSocket disconnected");
   };
 
   return ws;

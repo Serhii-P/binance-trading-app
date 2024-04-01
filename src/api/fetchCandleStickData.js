@@ -1,8 +1,6 @@
 import axios from "axios";
-import { generateInitialRandomSignals } from "../utils/generateRandomSignal";
 
 export const fetchInitialCandlestickData = async (symbol, interval, limit) => {
-  
   try {
     const response = await axios.get("https://api.binance.com/api/v3/klines", {
       params: {
@@ -26,9 +24,9 @@ export const fetchInitialCandlestickData = async (symbol, interval, limit) => {
       };
     });
 
-    const initialSignals = generateInitialRandomSignals(candlestickData, 7);
-    return { candlestickData, initialSignals };
+    return candlestickData;
   } catch (error) {
-    console.log("Error while fetching candles - ", error);
+    console.error("Error fetching candles:", error);
+    throw error;
   }
 };
