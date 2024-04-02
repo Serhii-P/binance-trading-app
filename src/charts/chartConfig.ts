@@ -1,5 +1,7 @@
-export const optionsWithAnnotations = (signals) => {
-  const annotations = signals.map((signal) => ({
+import { Annotation, ChartOptions, Signal } from "../types/types";
+
+export const optionsWithAnnotations = (signals: Signal[]): ChartOptions => {
+  const annotations = signals.map((signal: Signal) => ({
     x: signal.x,
     borderColor: signal.type === "buy" ? "#00E396" : "#FF4560",
     label: {
@@ -30,7 +32,7 @@ export const optionsWithAnnotations = (signals) => {
       },
     },
     annotations: {
-      xaxis: annotations,
+      xaxis: annotations as Annotation[],
     },
   };
 };

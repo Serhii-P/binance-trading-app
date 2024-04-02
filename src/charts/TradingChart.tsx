@@ -9,30 +9,32 @@ import {
   generateInitialRandomSignals,
   generateRandomSignals,
 } from "../utils/generateRandomSignal";
+import { CandleData, ChartOptions, ChartProps, Signal } from "../types/types";
 
-const TradingChart = ({ interval, symbol }) => {
-  const [initialCandlestickData, setInitialCandlestickData] = useState([]);
-  const [signals, setSignals] = useState([]);
+const TradingChart = ({ interval, symbol }: ChartProps) => {
+  const [initialCandlestickData, setInitialCandlestickData] = useState<CandleData[]>([]);
+  const [signals, setSignals] = useState<Signal[]>([]);
   const [loading, setLoading] = useState(true);
   const signalsGenerated = useRef(false);
+
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const candlestickData = await fetchInitialCandlestickData(
+        const candlestickData = await fetchInitialCandlestickData({
           symbol,
           interval,
-          50
-        );
+          limit: 50,
+        });
 
-        setInitialCandlestickData(candlestickData);
+        setInitialCandlestickData(candlestickData as CandleData[]) ;
 
         if (!signalsGenerated.current) {
           const initialSignals = generateInitialRandomSignals(
             candlestickData,
             7
           );
-          setSignals(initialSignals);
+          setSignals(initialSignals as Signal[]);
           signalsGenerated.current = true;
         }
 
@@ -62,7 +64,8 @@ const TradingChart = ({ interval, symbol }) => {
     return <div>Loading...</div>;
   }
 
-  const options = optionsWithAnnotations(signals);
+  const options: ChartOptions = optionsWithAnnotations(signals);
+
   return (
     <>
       <ReactApexChart

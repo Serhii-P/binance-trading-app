@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import TradingChart from "./charts/TradingChart";
 import DropdownMenu from "./menu/DropdownMenu";
 import "./App.css";
@@ -20,13 +20,13 @@ function App() {
             label="Interval"
             options={intervals}
             value={interval}
-            onChange={(e) => setInterval(e.target.value)}
+            onChange={(e: ChangeEvent<HTMLSelectElement>) => setInterval(e.target.value)}
           />
           <DropdownMenu
             label="Crypto"
             options={crypto}
             value={ticker}
-            onChange={(e) => setTicker(e.target.value)}
+            onChange={(e: ChangeEvent<HTMLSelectElement>) => setTicker(e.target.value)}
           />
         </div>
       </header>

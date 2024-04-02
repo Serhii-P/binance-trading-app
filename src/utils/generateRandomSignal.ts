@@ -1,5 +1,7 @@
-export const generateRandomSignals = (candlestickData) => {
-  const signals = [];
+import { CandleData, CandlestickData, Signal } from "../types/types";
+
+export const generateRandomSignals = (candlestickData: CandlestickData): Signal[] => {
+  const signals: Signal[] = [];
   if (Math.random() > 0.9) {
     const signal = {
       x: candlestickData[0],
@@ -7,13 +9,13 @@ export const generateRandomSignals = (candlestickData) => {
       volume: Math.floor(Math.random() * 1000000),
       type: Math.random() > 0.5 ? "buy" : "sell",
     };
-    signals.push(signal);
+    signals.push(signal as Signal);
   }
 
   return signals;
 };
 
-export const generateInitialRandomSignals = (candlestickData, count) => {
+export const generateInitialRandomSignals = (candlestickData: CandleData[], count: number) => {
   const signals = [];
   for (let i = 0; i < count; i++) {
     const randomIndex = Math.floor(Math.random() * candlestickData.length);

@@ -1,7 +1,8 @@
 import React from "react";
 import { formatTime } from "../helpers/formatTime";
+import { Signal } from "../types/types";
 
-const SignalTable = ({ signals }) => {
+const SignalTable = ({ signals }: { signals: Signal[] }) => {
   return (
     <div className="signal-table-container">
       <h3>Signals</h3>
@@ -16,7 +17,7 @@ const SignalTable = ({ signals }) => {
             </tr>
           </thead>
           <tbody>
-            {signals.map((signal, index) => (
+            {signals.map((signal: Signal, index: number) => (
               <tr key={index}>
                 <td>{signal.type}</td>
                 <td>{formatTime(signal.x)}</td>

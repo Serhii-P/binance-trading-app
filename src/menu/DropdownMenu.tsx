@@ -1,5 +1,13 @@
+import { ChangeEvent } from "react";
 
-const DropdownMenu = ({ label, options, value, onChange }) => {
+interface MenuProps {
+  label: string;
+  options: string[];
+  value: string;
+  onChange: (value: ChangeEvent<HTMLSelectElement>) => void;
+}
+
+const DropdownMenu = ({ label, options, value, onChange }: MenuProps) => {
   return (
     <div className="dropdown-menu">
       <label className="dropdown-label">{label}</label>

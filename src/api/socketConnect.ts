@@ -1,10 +1,13 @@
+import { Dispatch, SetStateAction } from "react";
+import { CandleData, Signal } from "../types/types";
+
 export const handleWebSocket = (
-  symbol,
-  interval,
-  setInitialCandlestickData,
-  setSignals,
-  fetchInitialCandlestickData,
-  generateRandomSignals
+  symbol: string,
+  interval: string,
+  setInitialCandlestickData: Dispatch<SetStateAction<CandleData[]>>,
+  setSignals: Dispatch<SetStateAction<Signal[]>>,
+  fetchInitialCandlestickData: () => Promise<void>,
+  generateRandomSignals: any
 ) => {
   const ws = new WebSocket(
     `wss://stream.binance.com:9443/ws/${symbol}@kline_${interval}`
@@ -34,7 +37,7 @@ export const handleWebSocket = (
         ],
       };
 
-      setInitialCandlestickData((prevData) => {
+      setInitialCandlestickData((prevData: CandleData[]) => {
         const newCandleStick = [...prevData];
 
         if (data.k.x) {
@@ -47,7 +50,8 @@ export const handleWebSocket = (
             data.k.l,
             data.k.c,
           ]);
-          setSignals((prevSignals) => [...prevSignals, ...newSignal]);
+
+          setSignals((prevSignals: Signal[]) => [...prevSignals, ...newSignal]);
         } else {
           newCandleStick[newCandleStick.length - 1] = candlestick;
         }

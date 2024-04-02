@@ -1,6 +1,7 @@
 import axios from "axios";
+import { CandlestickData, ChartProps } from "../types/types";
 
-export const fetchInitialCandlestickData = async (symbol, interval, limit) => {
+export const fetchInitialCandlestickData = async ({ symbol, interval, limit }: ChartProps) => {
   try {
     const response = await axios.get("https://api.binance.com/api/v3/klines", {
       params: {
@@ -10,7 +11,7 @@ export const fetchInitialCandlestickData = async (symbol, interval, limit) => {
       },
     });
 
-    const candlestickData = response.data.map((candlestick) => {
+    const candlestickData = response.data.map((candlestick: CandlestickData) => {
       const [openTime, open, high, low, close] = candlestick;
 
       return {
